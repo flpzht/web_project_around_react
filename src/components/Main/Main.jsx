@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import avatar from '../../../images/avatar.jpg'
 import Popup from './components/Popup/Popup';
 import NewCard from './components/Popup/components/NewCard/NewCard';
@@ -6,11 +6,13 @@ import EditAvatar from './components/Popup/components/EditAvatar/EditAvatar';
 import EditProfile from './components/Popup/components/EditProfile/EditProfile';
 import Card from './components/Card/Card';
 import api from '../../utils/api';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 
 function Main() {
     const [popup, setPopup] = useState(null);
     const [cards, setCards] = useState([]);
+    const currentUser = useContext(CurrentUserContext);     
 
     useEffect(() => {
         api.getInitialCards()
@@ -49,13 +51,13 @@ function Main() {
         <main className="content">
             <section className="profile page__section">
                 <div className="profile__avatar">
-                    <img className="profile__image" src={avatar} alt="Avatar" />
+                    <img className="profile__image" src={currentUser?.avatar} alt="Avatar" />
                     <button aria-label="Edit avatar" className="profile__avatar-button" type="button" onClick={() => handleOpenPopup(editAvatarPopup)} />
                 </div>
                 <div className="profile__info">
-                    <h1 className="profile__title">Coustaeu</h1>
+                    <h1 className="profile__title">{currentUser?.name}</h1>
                     <button aria-label="Edit profile" className="profile__edit-button" type="button" onClick={() => handleOpenPopup(editProfilePopup)} />
-                    <p className="profile__description">Explorer</p>
+                    <p className="profile__description">{currentUser?.about}</p>
                 </div>
                 <button aria-label="Add card" className="profile__add-button" type="button" onClick={() => handleOpenPopup(newCardPopup)} />
             </section>
