@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react'
+
 import Header from './Header/Header'
 import Main from './Main/Main'
 import Footer from './Footer/Footer'
-import { useState, useEffect } from 'react'
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import api from '../utils/api'
+import { CurrentUserContext } from '../contexts/CurrentUserContext'
+
 
 function App() {
 
@@ -19,10 +21,21 @@ function App() {
       });
   }, []);
 
+  const handleUpdateUser = (data) => {
+    (async () => {
+      await api.setUserInfo(data)
+      .then((newData) => {
+        setCurrentUser(newData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    })();
+  }
   
   return (
     <>
-      <CurrentUserContext.Provider value={currentUser}>
+      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser }}>
       <div className="page__content">
         <Header />
         <Main />
