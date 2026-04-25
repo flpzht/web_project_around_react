@@ -60,6 +60,14 @@ function Main() {
             .catch((error) => console.error(error));
     }
 
+    function handleCardDelete(card) {
+        api.deleteCard(card._id)
+            .then(() => {
+                setCards((state) => state.filter((currentCard) => currentCard._id !== card._id));
+            })
+            .catch((error) => console.error(error));
+    }
+
     return (
         <main className="content">
             <section className="profile page__section">
@@ -77,7 +85,7 @@ function Main() {
             <section className="cards page__section">
                 <ul className="cards__list">
                     {cards.map((card) => (
-                        <Card key={card._id} card={{ ...card, handleOpenPopup, handleClosePopup }} onCardLike={handleCardLike} />
+                        <Card key={card._id} card={{ ...card, handleOpenPopup, handleClosePopup }} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
                     ))}
                 </ul>
             </section>
