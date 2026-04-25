@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react';
-import avatar from '../../../images/avatar.jpg'
 import Popup from './components/Popup/Popup';
 import NewCard from './components/Popup/components/NewCard/NewCard';
 import EditAvatar from './components/Popup/components/EditAvatar/EditAvatar';
@@ -12,7 +11,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 function Main() {
     const [popup, setPopup] = useState(null);
     const [cards, setCards] = useState([]);
-    const currentUser = useContext(CurrentUserContext);     
+    const currentUser = useContext(CurrentUserContext);
 
     useEffect(() => {
         api.getInitialCards()
@@ -47,6 +46,20 @@ function Main() {
         setPopup(null);
     };
 
+    async function handleCardLike(card) {
+        const isLiked = card.isLiked;
+
+        await api.changeLikeCardStatus(card._id, !isLiked)
+            .then((newCard) => {
+                setCards((state) =>
+                    state.map((currentCard) =>
+                        currentCard._id === card._id ? newCard : currentCard
+                    )
+                );
+            })
+            .catch((error) => console.error(error));
+    }
+
     return (
         <main className="content">
             <section className="profile page__section">
@@ -64,7 +77,7 @@ function Main() {
             <section className="cards page__section">
                 <ul className="cards__list">
                     {cards.map((card) => (
-                        <Card key={card._id} card={{...card, handleOpenPopup, handleClosePopup}} />
+                        <Card key={card._id} card={{ ...card, handleOpenPopup, handleClosePopup }} onCardLike={handleCardLike} />
                     ))}
                 </ul>
             </section>
@@ -73,7 +86,7 @@ function Main() {
                 <Popup onClose={handleClosePopup} title={popup.title}>
                     {popup.children}
                 </Popup>
-            )}            
+            )}
 
         </main>
     );

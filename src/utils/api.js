@@ -60,6 +60,10 @@ class Api {
     }).then(this._handleResponse);
   }
 
+  changeLikeCardStatus(cardId, isLiked) {
+    return isLiked ? this.likeCard(cardId) : this.unlikeCard(cardId);
+  }
+  
   changeAvatar(data) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
