@@ -8,8 +8,8 @@ import api from '../../utils/api';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 
-function Main() {
-    const [popup, setPopup] = useState(null);
+function Main(props) {
+    const { popup, onOpenPopup, onClosePopup } = props;
     const [cards, setCards] = useState([]);
     const { currentUser } = useContext(CurrentUserContext);
 
@@ -36,14 +36,6 @@ function Main() {
     const editProfilePopup = {
         title: 'Edit Profile',
         children: <EditProfile />
-    };
-
-    function handleOpenPopup(popup) {
-        setPopup(popup);
-    };
-
-    function handleClosePopup() {
-        setPopup(null);
     };
 
     async function handleCardLike(card) {
@@ -73,25 +65,25 @@ function Main() {
             <section className="profile page__section">
                 <div className="profile__avatar">
                     <img className="profile__image" src={currentUser?.avatar} alt="Avatar" />
-                    <button aria-label="Edit avatar" className="profile__avatar-button" type="button" onClick={() => handleOpenPopup(editAvatarPopup)} />
+                    <button aria-label="Edit avatar" className="profile__avatar-button" type="button"  onClick={() => onOpenPopup(editAvatarPopup)}/>
                 </div>
                 <div className="profile__info">
                     <h1 className="profile__title">{currentUser?.name}</h1>
-                    <button aria-label="Edit profile" className="profile__edit-button" type="button" onClick={() => handleOpenPopup(editProfilePopup)} />
+                    <button aria-label="Edit profile" className="profile__edit-button" type="button" onClick={() => onOpenPopup(editProfilePopup)} />
                     <p className="profile__description">{currentUser?.about}</p>
                 </div>
-                <button aria-label="Add card" className="profile__add-button" type="button" onClick={() => handleOpenPopup(newCardPopup)} />
+                <button aria-label="Add card" className="profile__add-button" type="button" onClick={() => onOpenPopup(newCardPopup)} />
             </section>
             <section className="cards page__section">
                 <ul className="cards__list">
                     {cards.map((card) => (
-                        <Card key={card._id} card={{ ...card, handleOpenPopup, handleClosePopup }} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+                        <Card key={card._id} card={{ ...card, onOpenPopup, onClosePopup }} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
                     ))}
                 </ul>
             </section>
 
             {popup && (
-                <Popup onClose={handleClosePopup} title={popup.title}>
+                <Popup onClose={onClosePopup} title={popup.title}>
                     {popup.children}
                 </Popup>
             )}

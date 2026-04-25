@@ -11,6 +11,8 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState(null);
 
+  const [popup, setPopup] = useState(null);
+
   useEffect(() => {
     api.getUserInfo()
       .then((userData) => {
@@ -21,11 +23,20 @@ function App() {
       });
   }, []);
 
+  function handleOpenPopup(popup) {
+        setPopup(popup);
+    };
+
+    function handleClosePopup() {
+        setPopup(null);
+    };
+
   const handleUpdateUser = (data) => {
     (async () => {
       await api.setUserInfo(data)
       .then((newData) => {
         setCurrentUser(newData);
+        handleClosePopup();
       })
       .catch((err) => {
         console.log(err);
@@ -33,12 +44,13 @@ function App() {
     })();
   }
   
+  
   return (
     <>
       <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser }}>
       <div className="page__content">
         <Header />
-        <Main />
+        <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} popup={popup}/>
         <Footer />
       </div>
       </CurrentUserContext.Provider>
