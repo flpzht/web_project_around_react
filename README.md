@@ -82,11 +82,16 @@ web_project_around_react/
 │  │              │  └─ EditProfile.jsx
 │  │              └─ EditAvatar/
 │  │                 └─ EditAvatar.jsx
-│  ├─ images/
-│  ├─ blocks/
-│  ├─ vendor/
-│  ├─ index.css
-│  └─ main.jsx
+│  ├─ contexts/
+│  │  └─ CurrentUserContext.js
+│  └─ utils/
+│    └─ api.js
+│
+├─ images/
+├─ blocks/
+├─ vendor/
+├─ index.css
+├─ main.jsx│  
 ├─ index.html
 ├─ vite.config.js
 └─ README.md
