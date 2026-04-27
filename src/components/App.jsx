@@ -24,35 +24,48 @@ function App() {
   }, []);
 
   function handleOpenPopup(popup) {
-        setPopup(popup);
-    };
+    setPopup(popup);
+  };
 
-    function handleClosePopup() {
-        setPopup(null);
-    };
+  function handleClosePopup() {
+    setPopup(null);
+  };
 
   const handleUpdateUser = (data) => {
     (async () => {
       await api.setUserInfo(data)
-      .then((newData) => {
-        setCurrentUser(newData);
-        handleClosePopup();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((newData) => {
+          setCurrentUser(newData);
+          handleClosePopup();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })();
   }
-  
-  
+
+  function handleUpdateAvatar(data) {
+    (async () => {
+      await api.changeAvatar(data)
+        .then((newData) => {
+          setCurrentUser(newData);
+          handleClosePopup();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })();
+  }
+
+
   return (
     <>
-      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser }}>
-      <div className="page__content">
-        <Header />
-        <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} popup={popup}/>
-        <Footer />
-      </div>
+      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser, handleUpdateAvatar }}>
+        <div className="page__content">
+          <Header />
+          <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} popup={popup} />
+          <Footer />
+        </div>
       </CurrentUserContext.Provider>
     </>
   )
