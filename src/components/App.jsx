@@ -10,7 +10,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 function App() {
 
   const [currentUser, setCurrentUser] = useState(null);
-
+  const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
 
   useEffect(() => {
@@ -22,6 +22,17 @@ function App() {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    api.getInitialCards()
+      .then((cards) => {
+        setCards(cards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
 
   function handleOpenPopup(popup) {
     setPopup(popup);
@@ -44,7 +55,7 @@ function App() {
     })();
   }
 
-  function handleUpdateAvatar(data) {
+  const handleUpdateAvatar = (data) => {
     (async () => {
       await api.changeAvatar(data)
         .then((newData) => {
@@ -57,13 +68,36 @@ function App() {
     })();
   }
 
+  async function handleCardLike(card) {
+    const isLiked = card.isLiked;
+
+    await api.changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((currentCard) =>
+            currentCard._id === card._id ? newCard : currentCard
+          )
+        );
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+      .then(() => {
+        setCards((state) => state.filter((currentCard) => currentCard._id !== card._id));
+      })
+      .catch((error) => console.error(error));
+  }
+
 
   return (
     <>
-      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser, handleUpdateAvatar }}>
+      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser, handleUpdateAvatar, handleCardLike, handleCardDelete }}>
+
         <div className="page__content">
           <Header />
-          <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} popup={popup} />
+          <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} popup={popup} onCardLike={handleCardLike} onCardDelete={handleCardDelete} cards={cards} />
           <Footer />
         </div>
       </CurrentUserContext.Provider>
