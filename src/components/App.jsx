@@ -90,10 +90,19 @@ function App() {
       .catch((error) => console.error(error));
   }
 
+  function handleAddPlaceSubmit(card) {
+    api.addCard(card)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        handleClosePopup();
+      })
+      .catch((error) => console.error(error));
+  }
+
 
   return (
     <>
-      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser, handleUpdateAvatar, handleCardLike, handleCardDelete }}>
+      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser, handleUpdateAvatar, handleCardLike, handleCardDelete, handleAddPlaceSubmit }}>
 
         <div className="page__content">
           <Header />
