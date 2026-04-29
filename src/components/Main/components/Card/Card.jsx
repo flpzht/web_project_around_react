@@ -6,7 +6,7 @@ export default function Card(props) {
     const { onCardLike, onCardDelete } = props;
 
     const imageComponent = {
-        title: name,
+        title: null,
         children: <ImagePopup card={props.card} />
     };
 
