@@ -12,8 +12,8 @@ export default function Card(props) {
     };
 
     const removeCard = {
-        title: 'Remove Card',
-        children: <RemoveCard onClose={onOpenPopup} onConfirm={handleDeleteClick} />
+        title: 'Remove Confirmation',
+        children: <RemoveCard onClose={onClosePopup} onConfirm={handleDeleteClick} />
     };
 
     const cardLikeButtonClassName = `card__like-button ${isLiked ? 'card__like-button_is-active' : ''}`;
